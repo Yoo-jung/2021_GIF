@@ -21,3 +21,16 @@ elif seoson >= '5' and seoson <= '8':
     print('Summer')
 else:
     print('Spring')
+    
+#sort Temp data
+temp = int(jsonObj['current']['temp_c'])
+if temp >= 28:
+    print('0x05')
+elif temp >= 20 and temp < 28:
+    print('0x06')
+elif temp >= 10 and temp < 20:
+    print('0x07')
+elif temp >= 0 and temp < 10:
+    print('0x08')
+elif temp < 0:
+    print('0x09')
