@@ -10,6 +10,7 @@ FACE = 0xF4
 SEASON = 0xF5
 TEMP = 0xF6
 uart_header = [0x55,0x66]
+ser = serial.Serial ("/dev/ttyS0", 115200)
 
 #     get face frame
 
@@ -50,7 +51,6 @@ while True:
             send_data.append(FACE)
             send_data.append(0x00)
             serial.write(send_data)
-            send_data =[]
             time.sleep(1)
             break
 
@@ -87,7 +87,6 @@ else:
     send_data.append(0x02)
     
 serial.write(send_data)
-send_data=[]
     
 #sort Temp data
 temp = int(jsonObj['current']['temp_c'])
@@ -110,4 +109,3 @@ elif temp < 0:
     send_data.append(0x09)
     
 serial.write(send_data)
-send_data=[]

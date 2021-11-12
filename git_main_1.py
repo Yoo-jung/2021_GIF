@@ -8,7 +8,7 @@ import time
 FACE = 0xF4
 SEASON = 0xF5
 TEMP = 0xF6
-uart_header = [0x55,0x66]
+uart_header = [0x61,0x62]
 
 # opencv python 코딩 기본 틀
 # 카메라 영상을 받아올 객체 선언 및 설정(영상 소스, 해상도 설정)
