@@ -4,15 +4,13 @@ import cv2
 import serial
 import time
 
-
 #protocol
 FACE = 0xF4
 SEASON = 0xF5
 TEMP = 0xF6
 uart_header = [0x55,0x66]
 
-#     get face frame
-
+# opencv python 코딩 기본 틀
 # 카메라 영상을 받아올 객체 선언 및 설정(영상 소스, 해상도 설정)
 capture = cv2.VideoCapture(0)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
@@ -22,7 +20,6 @@ capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
 face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
 # eye_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_eye.xml')
 # 무한루프
-face_check = 'N'
 while True:    
     ret, frame = capture.read()     # 카메라로부터 현재 영상을 받아 frame에 저장, 잘 받았다면 ret가 참
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 영상을 흑백으로 바꿔줌
@@ -38,25 +35,15 @@ while True:
     if len(faces) :
         for  x, y, w, h in faces :
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255,255,255), 2, cv2.LINE_4)
-            face_check = 'Y'
     '''if len(eyes) :
         for  x, y, w, h in eyes :
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0,0,255), 2, cv2.LINE_4)'''
     cv2.imshow("original", frame)   # frame(카메라 영상)을 original 이라는 창에 띄워줌 
-    
-    #     if get faceframe -> break!!!!!!!
-    if face_check == 'Y':  # 키보드의 q 를 누르면 무한루프가 멈춤
-            send_data = uart_header
-            send_data.append(FACE)
-            send_data.append(0x00)
-            serial.write(send_data)
-            send_data =[]
-            time.sleep(1)
+    if cv2.waitKey(1) == ord('q'):  # 키보드의 q 를 누르면 무한루프가 멈춤
             break
 
 capture.release()                   # 캡처 객체를 없애줌
 cv2.destroyAllWindows()             # 모든 영상 창을 닫아줌
-
 
 #     sort weather
 # get API data
