@@ -19,7 +19,7 @@ capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
 capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
 
 # haar cascade 검출기 객체 선언
-face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('GIF2021_1/haarcascade/haarcascade_frontalface_default.xml')
 # eye_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_eye.xml')
 # 무한루프
 face_check = 'N'
@@ -46,10 +46,12 @@ while True:
     
     #     if get faceframe -> break!!!!!!!
     if face_check == 'Y':  # 키보드의 q 를 누르면 무한루프가 멈춤
-            time.sleep(3)
             send_data = uart_header
             send_data.append(FACE)
             send_data.append(0x00)
+            serial.write(send_data)
+            send_data =[]
+            time.sleep(1)
             break
 
 capture.release()                   # 캡처 객체를 없애줌
@@ -74,18 +76,27 @@ send_data.append(SEASON)
 if  seoson == '12' or seoson <= '2':
     print('Winter')
     send_data.append(0x04)
+    serial.write(send_data)
+    send_data=[]
 elif seoson >= '9' and seoson <= '11':
     print('Fall')
     send_data.append(0x02)
+    serial.write(send_data)
+    send_data=[]
 elif seoson >= '5' and seoson <= '8':
     print('Summer')
     send_data.append(0x03)
+    serial.write(send_data)
+    send_data=[]
 else:
     print('Spring')
     send_data.append(0x02)
+    serial.write(send_data)
+    send_data=[]
     
 #sort Temp data
 temp = int(jsonObj['current']['temp_c'])
+send_data = uart_header
 send_data.append(TEMP)
 if temp >= 28:
     print('0x05')
@@ -102,3 +113,6 @@ elif temp >= 0 and temp < 10:
 elif temp < 0:
     print('0x09')
     send_data.append(0x09)
+    
+serial.write(send_data)
+send_data=[]
